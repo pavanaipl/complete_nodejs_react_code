@@ -26,11 +26,11 @@ export default class ViewTrasactionDetails extends Component {
         };        
         
     }
-componentDidMount() {
+// componentDidMount() {
 
-console.log(this.props.location.state.contract_id)
 
-}
+
+// }
   
 
   
@@ -44,19 +44,19 @@ console.log(this.props.location.state.contract_id)
       <div className="col-md-6">
 
          <table style={{marginTop:50}} className="table table-hover table-striped">
-
-             <tr><b> ContractId : {this.props.location.state.id.contract_id}</b></tr>
-             <tr><b> ContractStatus : {this.props.location.state.id.contract_status}</b></tr>
-             <tr><b> Portfolio : {this.props.location.state.id.portfolio}</b></tr>
-             <tr><b> PortfolioGroup : {this.props.location.state.id.portfolio_group}</b></tr>
-             <tr><b> Counterparty : {this.props.location.state.id.counterparty}</b></tr>
-             <tr><b> SecurityType : {this.props.location.state.id.security_type}</b></tr>
-             <tr><b> SecurityGroup : {this.props.location.state.id.security_group}</b></tr>
-             <tr><b> Dealer : {this.props.location.state.id.dealer}</b></tr>
-             <tr><b> TradeDate : {this.props.location.state.id.trade_date}</b></tr>
-             <tr><b> SettlementDays : {this.props.location.state.id.settlement_days}</b></tr>
-             <tr><b> SettlementDate : {this.props.location.state.id.settlement_date}</b></tr>
-
+            <tbody>
+             <tr><td style ={{marginRight:30}}> ContractId : {this.props.location.state.id.contract_id} </td></tr>
+             <tr><td>ContractStatus : {this.props.location.state.id.contract_status} </td></tr>
+             <tr><td> Portfolio : {this.props.location.state.id.portfolio} </td> </tr>
+             <tr><td> PortfolioGroup : {this.props.location.state.id.portfolio_group}</td></tr>
+             <tr><td> Counterparty : {this.props.location.state.id.counterparty}</td></tr>
+             <tr><td> SecurityType : {this.props.location.state.id.security_type}</td></tr>
+             <tr><td> SecurityGroup : {this.props.location.state.id.security_group}</td></tr>
+             <tr><td> Dealer : {this.props.location.state.id.dealer}</td></tr>
+             <tr><td> TradeDate : {this.props.location.state.id.trade_date}</td></tr>
+             <tr><td>  SettlementDays : {this.props.location.state.id.settlement_days}</td></tr>
+             <tr><td> SettlementDate : {this.props.location.state.id.settlement_date}</td></tr>
+            </tbody>
          </table>
       </div>
      </div>
