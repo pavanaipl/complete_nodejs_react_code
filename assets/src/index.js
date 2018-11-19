@@ -74,16 +74,18 @@ onClickHandler(){
       <div className="App">
             
             <table style={{marginTop:50}} className="table table-hover table-striped">
-            <tr>
+                <thead>
+                    <tr>
                           <th style={{padding:20}}colSpan="3">ContactId</th>
-                          <th >contract_status</th>
-                          <th >portfolio</th>
-                          <th >portfolio_group</th>
-                          <th >counterparty</th>
-                          <th >settlement_days</th>
-                          <th >settlement_date</th>
+                          <th >Contract Status</th>
+                          <th >Portfolio</th>
+                          <th >Portfolio Group</th>
+                          <th >Counterparty</th>
+                          <th >Settlement Days</th>
+                          <th >Settlement Date</th>
                           <th >Actions</th>
-</tr>
+                    </tr>
+                </thead>
                           
                           <tbody>
 

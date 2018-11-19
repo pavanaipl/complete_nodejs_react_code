@@ -13,6 +13,7 @@ import { Modal } from 'react-bootstrap';
 //eslint-disable import/first
 import Select from 'react-select';
 //eslint-disable import/first
+import Dialog from 'react-bootstrap-dialog'
 
 export default class EditTrasactionForm extends Component {
 
@@ -61,7 +62,21 @@ export default class EditTrasactionForm extends Component {
     
     axios.post(`http://localhost:1337/api/trade-information/update`,values)
             .then((res) => {
-              console.log(res)
+              
+              this.dialog.show({
+                    title: 'Transaction Update',
+                    body: 'Data as been updated successfully',
+                    actions: [
+                      
+                      Dialog.OKAction(()=>{
+                        console.log("click")
+                        window.location.href = ("/")
+                      }
+
+                        )
+                    ],
+  
+})
                
             })
             .catch(err => {
@@ -173,6 +188,18 @@ export default class EditTrasactionForm extends Component {
             type='text'
             placeholder = {this.props.location.state.id.contract_id}
             value={this.props.location.state.contract_id}
+            // validators={[
+            // 'required',
+            // (value) => {
+            //   if ((this.state.contractid_list).includes(value)) {
+            //     console.log(value)
+            //     return {valid: false, error: 'The contractId already exists!'}
+            //   }
+            //   else {
+            //     return {valid: true}
+            //   }
+            // }
+            // ]}
           />
 
           <Field
@@ -279,15 +306,23 @@ export default class EditTrasactionForm extends Component {
             type='text'
             placeholder = {this.props.location.state.id.trade_date}
             value={this.props.location.state.trade_date}
+            validators={[
+            'required',
+            (value) => {
+            var date=/^[0-9]{1,4}\-[0-9]{1,2}\-[0-9]{1,2}$/;
+            if(!date.test(value)){
+              
+              return {valid: false, error: 'Enter the date in yyyy-mm-dd format'}
+            }
+            else{
+                
+              return {valid: true}
+            }
+          }
+            ]}
           />
 
-          <Field  
-            name='settlement_days'
-            label='SettlementDays'
-            type='text'
-            placeholder = {this.props.location.state.id.settlement_days}
-            value={this.props.location.state.settlement_days}
-          />
+          
 
           <Field  
             name='settlement_date'
@@ -295,11 +330,67 @@ export default class EditTrasactionForm extends Component {
             type='text'
             placeholder = {this.props.location.state.id.settlement_date}
             value={this.props.location.state.settlement_date}
+            validators={[
+            'required',
+            (value) => {
+
+              var trade_date = this.refs['simpleForm'].getFormValues()["trade_date"]
+              var trade_date_object = new Date(trade_date);
+              var settlement_date_object = new Date(value);
+              if(trade_date_object < settlement_date_object ){
+                return {valid: true}
+              }
+              else {
+                console.log("false")
+                return {valid: false, error: 'The settlement date must be greater than trade date'}
+              }
+            }
+            ]}
           />
+
+
+          <Field  
+            name='settlement_days'
+            label='SettlementDays'
+            type='text'
+            placeholder = {this.props.location.state.id.settlement_days}
+            value={this.props.location.state.settlement_days}
+            validators={[
+            'required',
+            (value) => {
+           
+            if(isNaN(value)){
+              console.log("not a number")
+              return {valid: false, error: 'Enter a number'}
+            }
+            else{
+              console.log("number")
+              return {valid: true}
+            }
+          }
+            ]}
+          />
+
+          <Field
+            name='counterparty'
+            label='counterparty'
+            placeholder = {this.props.location.state.id.counterparty}
+            value={this.props.location.state.counterparty}
+            element= {
+              <Select
+                options={counteroptions}
+                valueAccessor={(selectedValue) => selectedValue.value}
+              />
+            }
+          />
+
+
+
 
 
         </Form>
         <button style={{marginBottom:20}} onClick={this.onClickHandler.bind(this)}>Submit</button>
+        <Dialog ref={(el) => { this.dialog = el }} />
 
         
     </div>

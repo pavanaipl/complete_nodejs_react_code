@@ -13,6 +13,7 @@ import { Modal } from 'react-bootstrap';
 //eslint-disable import/first
 import Select from 'react-select';
 //eslint-disable import/first
+import Dialog from 'react-bootstrap-dialog'
 
 export default class AddTrasactionForm extends Component {
 
@@ -85,32 +86,53 @@ export default class AddTrasactionForm extends Component {
     var settlement_date = new Date(values["settlement_date"]);
    
     
-      if ((this.state.contractid_list).includes(values["contract_id"]))
-    {
-        console.log("inside")
-        this.setState({ showModaltitle: true, error: "The entered contract ID already exists" })
+    //   if ((this.state.contractid_list).includes(values["contract_id"]))
+    // {
+        
+    //     this.dialog.showAlert('The entered contract ID already exists!')
 
-    }
+    //     // this.setState({ showModaltitle: true, error: "The entered contract ID already exists" })
 
-    else{
+    // }
 
-    if (trade_date < settlement_date){
+    // else{
+
+    // if (trade_date < settlement_date){
   
-      this.setState({ showModaltitle: false})
+    //   this.setState({ showModaltitle: false})
       axios.post(`http://localhost:1337/api/trade-information/create`,values)
             .then((res) => {
-              console.log(res)    
+               
+               // this.setState({ showModaltitle: true, error: "The data as been successfully added" })
+              
+               this.dialog.show({
+                    title: 'Add Transactions',
+                    body: 'Transaction details as been submitted successfully',
+                    actions: [
+                      Dialog.OKAction(()=>{
+                        window.location.href = ("/")
+                      }
+
+                        )
+                    ],
+  
+})
+
+
             })
             .catch(err => {
                 console.log(err);
             });
 
-    }
+    // }
 
-    else {
-      this.setState({ showModaltitle: true, error: "The trade date must be before settlement date" })
-    }
-  }
+    // else {
+      
+    //   this.dialog.showAlert('The trade date must be before settlement date!')
+
+    //   // this.setState({ showModaltitle: true, error: "The trade date must be before settlement date" })
+    // }
+  // }
 
 
 
@@ -125,7 +147,7 @@ export default class AddTrasactionForm extends Component {
 
  
   render () {
-    console.log(this.state.contract_id)
+    
 
     let contractoptions = [{
       id: 'Entry',
@@ -227,6 +249,18 @@ export default class AddTrasactionForm extends Component {
             name='contract_id'
             label='ContractId'
             type='text'
+            validators={[
+            'required',
+            (value) => {
+              if ((this.state.contractid_list).includes(value)) {
+                console.log(value)
+                return {valid: false, error: 'The contractId already exists!'}
+              }
+              else {
+                return {valid: true}
+              }
+            }
+            ]}
             
           />
           
@@ -267,16 +301,7 @@ export default class AddTrasactionForm extends Component {
             }
           />
 
-          <Field
-            name='counterparty'
-            label='counterparty'
-            element= {
-              <Select
-                options={counteroptions}
-                valueAccessor={(selectedValue) => selectedValue.value}
-              />
-            }
-          />
+          
 
           <Field
             name='security_type'
@@ -321,25 +346,86 @@ export default class AddTrasactionForm extends Component {
             label='TradeDate'
             type='text'
             placeholder = "yyyy-mm-dd"
-          />
-
-          <Field  
-            name='settlement_days'
-            label='SettlementDays'
-            type='text'
+            validators={[
+            'required',
+            (value) => {
+            var date=/^[0-9]{1,4}\-[0-9]{1,2}\-[0-9]{1,2}$/;
+            if(!date.test(value)){
+              
+              return {valid: false, error: 'Enter the date in yyyy-mm-dd format'}
+            }
+            else{
+                
+              return {valid: true}
+            }
+          }
+            ]}
             
           />
+
+         
 
           <Field  
             name='settlement_date'
             label='SettlementDate'
             type='text'
             placeholder = "yyyy-mm-dd"
+             validators={[
+            'required',
+            (value) => {
+
+              var trade_date = this.refs['simpleForm'].getFormValues()["trade_date"]
+              var trade_date_object = new Date(trade_date);
+              var settlement_date_object = new Date(value);
+              if(trade_date_object < settlement_date_object ){
+                return {valid: true}
+              }
+              else {
+                console.log("false")
+                return {valid: false, error: 'The settlement date must be greater than trade date'}
+              }
+            }
+            ]}
           />
+
+           <Field  
+            name='settlement_days'
+            label='SettlementDays'
+            type='text'
+            validators={[
+            'required',
+            (value) => {
+           
+            if(isNaN(value)){
+              console.log("not a number")
+              return {valid: false, error: 'Enter a number'}
+            }
+            else{
+              console.log("number")
+              return {valid: true}
+            }
+          }
+            ]}
+            
+          />
+
+          <Field
+            name='counterparty'
+            label='counterparty'
+            element= {
+              <Select
+                options={counteroptions}
+                valueAccessor={(selectedValue) => selectedValue.value}
+              />
+            }
+          />
+
+
 
 
         </Form>
         <button style={{marginBottom:20}} onClick={this.onClickHandler.bind(this)}>Submit</button>
+        <Dialog ref={(el) => { this.dialog = el }} />
 
          <Modal bsSize="lg" show={this.state.showModaltitle}
                             onHide={() => this.setState({ showModaltitle: false })}>                
