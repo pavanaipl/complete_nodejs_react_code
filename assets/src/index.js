@@ -76,7 +76,7 @@ onClickHandler(){
             <table style={{marginTop:50}} className="table table-hover table-striped">
                 <thead>
                     <tr>
-                          <th style={{padding:20}}colSpan="3">ContactId</th>
+                          <th colSpan="3">ContactId</th>
                           <th >Contract Status</th>
                           <th >Portfolio</th>
                           <th >Portfolio Group</th>
