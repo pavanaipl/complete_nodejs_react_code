@@ -20,6 +20,8 @@ export default class App extends Component {
             data_items:{}
         }
     }
+
+    
     
 
 
@@ -52,7 +54,7 @@ delete_information(id){
  axios.post(`http://localhost:1337/api/trade-information/delete`,values)
             .then((res) => {
               
-              console.log(res.data.data)
+           
                this.setState({all_transaction:res.data.data})
             })
             .catch(err => {
@@ -72,6 +74,8 @@ onClickHandler(){
 
     return (
       <div className="App">
+
+           {this.state.all_transaction.length != 0 ? 
             
             <table style={{marginTop:50}} className="table table-hover table-striped">
                 <thead>
@@ -87,94 +91,85 @@ onClickHandler(){
                     </tr>
                 </thead>
                           
-                          <tbody>
+                <tbody>
 
-                          {this.state.all_transaction.map((items,index) => (
+                    {this.state.all_transaction.map((items,index) => (
 
-                          <tr key={index}>
+                        <tr key={index}>
                             <td style={{textAlign:"center"}} colSpan="3">
                              {items.contract_id}
                             </td>
-                            <td >
+                            <td>
                              {items.contract_status}
                             </td>
-
                             <td >
                              {items.portfolio}
                             </td>
 
-                            <td >
+                            <td>
                              {items.portfolio_group}
                             </td>
 
-                            <td >
+                            <td>
                              {items.counterparty}
                             </td>
 
-                            <td >
+                            <td>
                              {items.settlement_days}
                             </td>
 
-                            <td >
+                            <td>
                              {items.settlement_date}
                             </td>
 
-                            
-
-
                             <td>
-                             <Link to={{ pathname: '/edit_transaction', state: { id:items} }}>
-                            <button
-                              type="button"
-                              className="btn btn-xs btn-default"
-                              onClick={(e) => this.user_information(items) }
-                            >
-                              Edit
-                            </button>
-                             
-                             </Link>
+                               <Link to={{ pathname: '/edit_transaction', state: { id:items} }}>
+                              <button
+                                type="button"
+                                className="btn btn-xs btn-default"
+                                onClick={(e) => this.user_information(items) }
+                              >
+                                Edit
+                              </button>
+                               
+                               </Link>
 
-                             <Link to={{ pathname: '/view_transaction', state: { id:items} }}>
+                               <Link to={{ pathname: '/view_transaction', state: { id:items} }}>
+                                
+                              <button
+                                type="button"
+                                className="btn btn-xs btn-default"
+                                
+                              >
+                                View
+                              </button>
                               
-                            <button
-                              type="button"
-                              className="btn btn-xs btn-default"
-                              
-                            >
-                              View
-                            </button>
-                            
-                            </Link>
+                              </Link>
 
-                            <button
-                              type="button"
-                              className="btn btn-xs btn-default"
-                              onClick={(e) => this.delete_information(items.id) }
-                            >
-                              Delete
-                            </button>
-
+                              <button
+                                type="button"
+                                className="btn btn-xs btn-default"
+                                onClick={(e) => this.delete_information(items.id) }
+                              >
+                                Delete
+                              </button>
                             
                             </td>
-                            
-                            
-                                 
-                            
-                          </tr>
+                                                      
+                        </tr>
                           ))}
                              
-                          </tbody>
+                </tbody>
+          </table> 
+                    : <p> <b>The Transaction data is not present </b> </p> 
 
-                          
+                  }
 
-
-                       </table> 
 
         <Link to="/add_transaction">
-        <button onClick={this.onClickHandler.bind(this)}>Add Transaction</button>
+        <button style= {{marginBottom:30}} onClick={this.onClickHandler.bind(this)}>Add Transaction</button>
         </Link>
        
-
 
       </div>
     );
